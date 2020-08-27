@@ -7,95 +7,108 @@ const store = new Vuex.Store({
   state: {
     token: 'Token db85852a1a615bdcf663aedfa88cc5ffb1e19c7e',
     loading: null,
-    accounts: []
+    accounts: [],
+    modals: {
+      errorModal: {
+        visible: false,
+        message: '', 
+      }
+    }
   },
   actions:{
     getClientAccounts(context) {
       context.dispatch ('startLoading')
-      return new Promise ((resolve) => {
+      return new Promise ((resolve, reject) => {
         return setTimeout (() => {
-          context.commit ('SET_ACCOUNTS', [
-            {
-              "id": 11,
-              "balance": "0.00",
-              "actions": [
+        //   context.commit ('SET_ACCOUNTS', [
+        //     {
+        //       "id": 11,
+        //       "balance": "0.00",
+        //       "actions": [
                   
-              ]
-            },
-            {
-            "id": 12,
-            "balance": "0.00",
-            "actions": [
+        //       ]
+        //     },
+        //     {
+        //     "id": 12,
+        //     "balance": "0.00",
+        //     "actions": [
                 
-            ]
-            },
-            {
-                "id": 1,
-                "balance": "0.00",
-                "actions": [
-                    1
-                ]
-            },
-            {
-                "id": 2,
-                "balance": "1000.00",
-                "actions": [
-                    2
-                ]
-            },
-            {
-                "id": 3,
-                "balance": "10000.00",
-                "actions": [
-                    3
-                ]
-            },
-            {
-                "id": 4,
-                "balance": "9900.00",
-                "actions": [
-                    4
-                ]
-            },
-            {
-                "id": 5,
-                "balance": "9900.00",
-                "actions": [
-                    5
-                ]
-            },
-            {
-                "id": 6,
-                "balance": "10000.00",
-                "actions": [
-                    6
-                ]
-            },
-            {
-                "id": 7,
-                "balance": "9900.00",
-                "actions": [
-                    7
-                ]
-            },
-            {
-                "id": 8,
-                "balance": "0.00",
-                "actions": []
-            },
-            {
-                "id": 9,
-                "balance": "0.00",
-                "actions": []
-            },
-            {
-                "id": 10,
-                "balance": "0.00",
-                "actions": []
-            }
-         ])
-          context.dispatch ('stopLoading');
-         resolve ();
+        //     ]
+        //     },
+        //     {
+        //         "id": 1,
+        //         "balance": "0.00",
+        //         "actions": [
+        //             1
+        //         ]
+        //     },
+        //     {
+        //         "id": 2,
+        //         "balance": "1000.00",
+        //         "actions": [
+        //             2
+        //         ]
+        //     },
+        //     {
+        //         "id": 3,
+        //         "balance": "10000.00",
+        //         "actions": [
+        //             3
+        //         ]
+        //     },
+        //     {
+        //         "id": 4,
+        //         "balance": "9900.00",
+        //         "actions": [
+        //             4
+        //         ]
+        //     },
+        //     {
+        //         "id": 5,
+        //         "balance": "9900.00",
+        //         "actions": [
+        //             5
+        //         ]
+        //     },
+        //     {
+        //         "id": 6,
+        //         "balance": "10000.00",
+        //         "actions": [
+        //             6
+        //         ]
+        //     },
+        //     {
+        //         "id": 7,
+        //         "balance": "9900.00",
+        //         "actions": [
+        //             7
+        //         ]
+        //     },
+        //     {
+        //         "id": 8,
+        //         "balance": "0.00",
+        //         "actions": []
+        //     },
+        //     {
+        //         "id": 9,
+        //         "balance": "0.00",
+        //         "actions": []
+        //     },
+        //     {
+        //         "id": 10,
+        //         "balance": "0.00",
+        //         "actions": []
+        //     }
+        //  ])
+        //   context.dispatch ('stopLoading');
+        //  resolve ();
+        // if (false) {
+        //   resolve()
+        // }
+        reject()
+        context.dispatch ('stopLoading');
+        throw new Error ()
+        
         }, 2000)
       })
     },
@@ -109,11 +122,17 @@ const store = new Vuex.Store({
     },
     stopLoading () {
       this.loading.close();
+    },
+    errorModal (context, options) {
+      context.commit ("OPEN_ERROR_DIALOG", options)
     }
   },
   mutations: {
     SET_ACCOUNTS(state, payload) {
       state.accounts = payload;
+    },
+    OPEN_ERROR_DIALOG (state, options) {
+      state.modals.errorModal = options;
     }
   },
   getters: {
@@ -122,6 +141,9 @@ const store = new Vuex.Store({
     },
     accounts (state) {
       return state.accounts;
+    },
+    errorModal (state) {
+      return state.modals.errorModal;
     }
   }
 });

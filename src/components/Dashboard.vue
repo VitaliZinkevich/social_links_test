@@ -33,15 +33,21 @@
       </div>
     </el-main>
   </el-container>
+  <UserInfoModal />
 </el-container>
 </template>
 
 <script>
+import UserInfoModal from './modals/UserInfoModal.vue'
+
 export default {
   name: 'Dashboard',
   data() {
       return {
       }
+  },
+  components: {
+    UserInfoModal
   },
   computed: {
     token (){
@@ -51,8 +57,26 @@ export default {
       return this.$store.getters.accounts;
     }
   },
-  created: function () {
-    this.$store.dispatch('getClientAccounts');
+  created: async function () {
+    try {
+      let res = await this.$store.dispatch('getClientAccounts');
+      if (res) {
+          console.log(res)
+      }
+    } catch (e) {
+      console.log(e)
+      let what = await this.$store.dispatch('errorModal', 
+          {
+            visible: true, 
+            message: 'Не удалось обновить список. Поробуем еще раз ?', 
+            resolve: Promise.resolve, 
+            reject: Promise.reject
+          }
+        );
+        if (what) {
+          this.$store.dispatch('getClientAccounts');
+        } 
+    }
   }
 }
 </script>
