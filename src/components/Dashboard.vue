@@ -1,5 +1,5 @@
 <template>
-<el-container style="height: 500px; border: 1px solid #eee">
+<el-container style="height: 100%; border: 1px solid #eee">
   
   <el-container>
     <el-header style="text-align: right; font-size: 12px">
@@ -24,6 +24,12 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        :disabled="accounts.length < 11"
+        small
+        layout="prev, pager, next"
+        :total="50">
+      </el-pagination>
     </el-main>
   </el-container>
 </el-container>
