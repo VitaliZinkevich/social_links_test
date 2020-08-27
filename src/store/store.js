@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue';
 import Vuex from 'vuex';
 
 Vue.use(Vuex);
@@ -7,15 +7,15 @@ const store = new Vuex.Store({
     count: 0
   },
   mutations: {
-    increment (state) {
-      state.count++
+    increment(state) {
+      state.count++;
     }
   },
   getters: {
-    count (state) {
+    count(state) {
       return state.count;
     }
   }
-})
+});
 
-export {store}
+export { store };
