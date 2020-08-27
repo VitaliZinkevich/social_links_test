@@ -1,19 +1,109 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { Loading } from 'element-ui';
 
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
-    count: 0
+    token: 'Token db85852a1a615bdcf663aedfa88cc5ffb1e19c7e',
+    loading: null
+  },
+  actions:{
+    getClientAccounts(context) {
+      context.dispatch ('startLoading')
+      return new Promise ((resolve) => {
+        return setTimeout (() => {
+          resolve ([
+            {
+                "id": 1,
+                "balance": "0.00",
+                "actions": [
+                    1
+                ]
+            },
+            {
+                "id": 2,
+                "balance": "1000.00",
+                "actions": [
+                    2
+                ]
+            },
+            {
+                "id": 3,
+                "balance": "10000.00",
+                "actions": [
+                    3
+                ]
+            },
+            {
+                "id": 4,
+                "balance": "9900.00",
+                "actions": [
+                    4
+                ]
+            },
+            {
+                "id": 5,
+                "balance": "9900.00",
+                "actions": [
+                    5
+                ]
+            },
+            {
+                "id": 6,
+                "balance": "10000.00",
+                "actions": [
+                    6
+                ]
+            },
+            {
+                "id": 7,
+                "balance": "9900.00",
+                "actions": [
+                    7
+                ]
+            },
+            {
+                "id": 8,
+                "balance": "0.00",
+                "actions": []
+            },
+            {
+                "id": 9,
+                "balance": "0.00",
+                "actions": []
+            },
+            {
+                "id": 10,
+                "balance": "0.00",
+                "actions": []
+            }
+         ])
+         context.dispatch ('stopLoading');
+        }, 2000)
+      })
+    },
+    startLoading() {
+      this.loading = Loading.service({
+        lock: true,
+        text: 'Загрузка...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+    },
+    stopLoading () {
+      this.loading.close();
+    }
   },
   mutations: {
+    
     increment(state) {
       state.count++;
     }
   },
   getters: {
-    count(state) {
-      return state.count;
+    token(state) {
+      return state.token;
     }
   }
 });

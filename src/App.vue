@@ -1,7 +1,5 @@
 <template>
-  <div id="app">
     <Dashboard/>
-  </div>
 </template>
 
 <script>
@@ -10,17 +8,12 @@ export default {
   name: 'App',
   components: {
     Dashboard
-  }
-  
+  },
 }
 </script>
 
 <style>
 html, body {
-  height: 100%;
-}
-
-.full-height {
   height: 100%;
 }
 </style>

@@ -3,8 +3,13 @@ import App from './App.vue';
 import { store } from './store/store';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(ElementUI);
+import locale from 'element-ui/lib/locale/lang/ru-RU'
+
+Vue.use(ElementUI, { locale });
 Vue.config.productionTip = false;
+
+
+
 
 new Vue({
   store,
