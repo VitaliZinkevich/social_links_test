@@ -6,14 +6,15 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     token: 'Token db85852a1a615bdcf663aedfa88cc5ffb1e19c7e',
-    loading: null
+    loading: null,
+    accounts: []
   },
   actions:{
     getClientAccounts(context) {
       context.dispatch ('startLoading')
       return new Promise ((resolve) => {
         return setTimeout (() => {
-          resolve ([
+          context.commit ('SET_ACCOUNTS', [
             {
                 "id": 1,
                 "balance": "0.00",
@@ -79,7 +80,8 @@ const store = new Vuex.Store({
                 "actions": []
             }
          ])
-         context.dispatch ('stopLoading');
+          context.dispatch ('stopLoading');
+         resolve ();
         }, 2000)
       })
     },
@@ -96,14 +98,16 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    
-    increment(state) {
-      state.count++;
+    SET_ACCOUNTS(state, payload) {
+      state.accounts = payload;
     }
   },
   getters: {
     token(state) {
       return state.token;
+    },
+    accounts (state) {
+      return state.accounts;
     }
   }
 });

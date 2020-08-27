@@ -34,26 +34,18 @@ export default {
   name: 'Dashboard',
   data() {
       return {
-        accounts: []
       }
   },
   computed: {
     token (){
       return this.$store.getters.token;
+    },
+    accounts () {
+      return this.$store.getters.accounts;
     }
   },
-  mounted: async function () {
-    let a = await this.$store.dispatch('getClientAccounts')
-    if (a) {
-      this.accounts = a;
-    }
-    
-    // .then ( r => {
-    //   this.$store.dispatch ('stopLoading');
-    //   if (r) {
-    //     this.accounts = r;
-    //   }
-    // });
+  created: function () {
+    this.$store.dispatch('getClientAccounts');
   }
 }
 </script>
