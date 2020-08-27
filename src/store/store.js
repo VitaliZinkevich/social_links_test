@@ -16,6 +16,20 @@ const store = new Vuex.Store({
         return setTimeout (() => {
           context.commit ('SET_ACCOUNTS', [
             {
+              "id": 11,
+              "balance": "0.00",
+              "actions": [
+                  
+              ]
+            },
+            {
+            "id": 12,
+            "balance": "0.00",
+            "actions": [
+                
+            ]
+            },
+            {
                 "id": 1,
                 "balance": "0.00",
                 "actions": [

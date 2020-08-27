@@ -1,8 +1,7 @@
 <template>
-<el-container style="height: 100%; border: 1px solid #eee">
-  
+<el-container>
   <el-container>
-    <el-header style="text-align: right; font-size: 12px">
+    <el-header class="header">
       <el-dropdown>
         <i class="el-icon-setting" style="margin-right: 15px"></i>
         <el-dropdown-menu slot="dropdown">
@@ -13,7 +12,7 @@
     </el-header>
     
     <el-main>
-      <el-table :data="accounts">
+      <el-table :data="accounts" :default-sort = "{prop: 'id', order: 'descending'}">
         <el-table-column prop="id" label="Номер счета">
         </el-table-column>
         <el-table-column prop="balance" label="Баланс счета">
@@ -24,12 +23,14 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        :disabled="accounts.length < 11"
-        small
-        layout="prev, pager, next"
-        :total="50">
-      </el-pagination>
+      <div class="pagintor-container">
+        <el-pagination
+          v-show="accounts.length > 10"
+          small
+          layout="prev, pager, next"
+          :total="accounts.length">
+        </el-pagination>
+      </div>
     </el-main>
   </el-container>
 </el-container>
@@ -57,6 +58,16 @@ export default {
 </script>
 
 <style>
+  .header {
+    text-align: right; 
+    font-size: 16px
+  }
+
+  .pagintor-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .el-header {
     background-color: #B3C0D1;
     color: #333;
