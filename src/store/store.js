@@ -1,151 +1,147 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { Loading } from 'element-ui';
+import Vue from "vue";
+import Vuex from "vuex";
+import { Loading } from "element-ui";
+import axios from "axios";
 
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
-    token: 'Token db85852a1a615bdcf663aedfa88cc5ffb1e19c7e',
+    token: "Token db85852a1a615bdcf663aedfa88cc5ffb1e19c7e",
     loading: null,
     accounts: [],
     modals: {
       errorModal: {
         visible: false,
-        message: '', 
-      }
-    }
+        message: "",
+      },
+    },
   },
-  actions:{
+  actions: {
+    async createAccount(context) {
+      try {
+        await axios.post(
+          "/user",
+          {},
+          { headers: { Autarization: context.getters.token } }
+        );
+      } catch (e) {
+        context.dispatch("errorModal", {
+          visible: true,
+          message: "Не удалось создать счет. Попробуйте позже.",
+        });
+      }
+    },
     getClientAccounts(context) {
-      context.dispatch ('startLoading')
-      return new Promise ((resolve, reject) => {
-        return setTimeout (() => {
-        //   context.commit ('SET_ACCOUNTS', [
-        //     {
-        //       "id": 11,
-        //       "balance": "0.00",
-        //       "actions": [
-                  
-        //       ]
-        //     },
-        //     {
-        //     "id": 12,
-        //     "balance": "0.00",
-        //     "actions": [
-                
-        //     ]
-        //     },
-        //     {
-        //         "id": 1,
-        //         "balance": "0.00",
-        //         "actions": [
-        //             1
-        //         ]
-        //     },
-        //     {
-        //         "id": 2,
-        //         "balance": "1000.00",
-        //         "actions": [
-        //             2
-        //         ]
-        //     },
-        //     {
-        //         "id": 3,
-        //         "balance": "10000.00",
-        //         "actions": [
-        //             3
-        //         ]
-        //     },
-        //     {
-        //         "id": 4,
-        //         "balance": "9900.00",
-        //         "actions": [
-        //             4
-        //         ]
-        //     },
-        //     {
-        //         "id": 5,
-        //         "balance": "9900.00",
-        //         "actions": [
-        //             5
-        //         ]
-        //     },
-        //     {
-        //         "id": 6,
-        //         "balance": "10000.00",
-        //         "actions": [
-        //             6
-        //         ]
-        //     },
-        //     {
-        //         "id": 7,
-        //         "balance": "9900.00",
-        //         "actions": [
-        //             7
-        //         ]
-        //     },
-        //     {
-        //         "id": 8,
-        //         "balance": "0.00",
-        //         "actions": []
-        //     },
-        //     {
-        //         "id": 9,
-        //         "balance": "0.00",
-        //         "actions": []
-        //     },
-        //     {
-        //         "id": 10,
-        //         "balance": "0.00",
-        //         "actions": []
-        //     }
-        //  ])
-        //   context.dispatch ('stopLoading');
-        //  resolve ();
-        // if (false) {
-        //   resolve()
-        // }
-        reject()
-        context.dispatch ('stopLoading');
-        throw new Error ()
-        
-        }, 2000)
-      })
+      context.dispatch("startLoading");
+      return new Promise((resolve /*reject*/) => {
+        return setTimeout(() => {
+          context.commit("SET_ACCOUNTS", [
+            {
+              id: 11,
+              balance: "0.00",
+              actions: [],
+            },
+            {
+              id: 12,
+              balance: "0.00",
+              actions: [],
+            },
+            {
+              id: 1,
+              balance: "0.00",
+              actions: [1],
+            },
+            {
+              id: 2,
+              balance: "1000.00",
+              actions: [2],
+            },
+            {
+              id: 3,
+              balance: "10000.00",
+              actions: [3],
+            },
+            {
+              id: 4,
+              balance: "9900.00",
+              actions: [4],
+            },
+            {
+              id: 5,
+              balance: "9900.00",
+              actions: [5],
+            },
+            {
+              id: 6,
+              balance: "10000.00",
+              actions: [6],
+            },
+            {
+              id: 7,
+              balance: "9900.00",
+              actions: [7],
+            },
+            {
+              id: 8,
+              balance: "0.00",
+              actions: [],
+            },
+            {
+              id: 9,
+              balance: "0.00",
+              actions: [],
+            },
+            {
+              id: 10,
+              balance: "0.00",
+              actions: [],
+            },
+          ]);
+          context.dispatch("stopLoading");
+          resolve();
+          // if (false) {
+          //   resolve()
+          // }
+          // reject()
+          // context.dispatch ('stopLoading');
+          // throw new Error ()
+        }, 2000);
+      });
     },
     startLoading() {
       this.loading = Loading.service({
         lock: true,
-        text: 'Загрузка...',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
+        text: "Загрузка...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
       });
     },
-    stopLoading () {
+    stopLoading() {
       this.loading.close();
     },
-    errorModal (context, options) {
-      context.commit ("OPEN_ERROR_DIALOG", options)
-    }
+    errorModal(context, options) {
+      context.commit("OPEN_ERROR_DIALOG", options);
+    },
   },
   mutations: {
     SET_ACCOUNTS(state, payload) {
       state.accounts = payload;
     },
-    OPEN_ERROR_DIALOG (state, options) {
+    OPEN_ERROR_DIALOG(state, options) {
       state.modals.errorModal = options;
-    }
+    },
   },
   getters: {
     token(state) {
       return state.token;
     },
-    accounts (state) {
+    accounts(state) {
       return state.accounts;
     },
-    errorModal (state) {
+    errorModal(state) {
       return state.modals.errorModal;
-    }
-  }
+    },
+  },
 });
 
 export { store };
