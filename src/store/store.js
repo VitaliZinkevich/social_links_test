@@ -137,6 +137,88 @@ const store = new Vuex.Store({
         }, 2000);
       });
     },
+    getClientOperations(context) {
+      context.dispatch("startLoading");
+      return new Promise((resolve) => {
+        let outcome = [
+          {
+            id: 1,
+            account: 7,
+            date: "2020-08-27T18:00:55.649421Z",
+            merchant: "x",
+            amount: "100.00",
+          },
+          {
+            id: 2,
+            account: 5,
+            date: "2020-08-27T18:01:01.100870Z",
+            merchant: "x",
+            amount: "100.00",
+          },
+          {
+            id: 3,
+            account: 4,
+            date: "2020-08-27T18:01:04.920795Z",
+            merchant: "x",
+            amount: "100.00",
+          },
+          {
+            id: 4,
+            account: 1,
+            date: "2020-08-27T18:01:13.525909Z",
+            merchant: "y",
+            amount: "100.00",
+          },
+        ];
+
+        let income = [
+          {
+            id: 1,
+            account: 1,
+            amount: "100.00",
+            date: "2020-08-27T17:59:35.106837Z",
+          },
+          {
+            id: 2,
+            account: 2,
+            amount: "1000.00",
+            date: "2020-08-27T17:59:42.104744Z",
+          },
+          {
+            id: 3,
+            account: 3,
+            amount: "10000.00",
+            date: "2020-08-27T17:59:46.663004Z",
+          },
+          {
+            id: 4,
+            account: 4,
+            amount: "10000.00",
+            date: "2020-08-27T17:59:50.014772Z",
+          },
+          {
+            id: 5,
+            account: 5,
+            amount: "10000.00",
+            date: "2020-08-27T17:59:52.743228Z",
+          },
+          {
+            id: 6,
+            account: 6,
+            amount: "10000.00",
+            date: "2020-08-27T17:59:55.691852Z",
+          },
+          {
+            id: 7,
+            account: 7,
+            amount: "10000.00",
+            date: "2020-08-27T17:59:59.361655Z",
+          },
+        ];
+        context.commit("SET_OPERATIONS", outcome.concat(income));
+        resolve();
+      });
+    },
     startLoading() {
       this.loading = Loading.service({
         lock: true,
@@ -161,6 +243,9 @@ const store = new Vuex.Store({
   mutations: {
     SET_ACCOUNTS(state, payload) {
       state.accounts = payload;
+    },
+    SET_OPERATIONS(state, payload) {
+      state.operations = payload;
     },
     OPEN_ERROR_DIALOG(state, options) {
       state.modals.errorModal = options;
@@ -187,6 +272,9 @@ const store = new Vuex.Store({
     },
     confirmModal(state) {
       return state.modals.confirmModal;
+    },
+    operationsByAccountId(state) {
+      return (id) => state.operations.filter((oper) => {});
     },
   },
 });

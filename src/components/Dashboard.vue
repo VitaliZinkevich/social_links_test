@@ -5,20 +5,14 @@
         <el-dropdown @command="createAccount()">
           <i class="el-icon-setting" style="margin-right: 15px"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :command="'create account'"
-              >Создать счет</el-dropdown-item
-            >
+            <el-dropdown-item :command="'create account'">Создать счет</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <span>{{ token }}</span>
       </el-header>
 
       <el-main>
-        <el-table
-          :data="tableData"
-          :default-sort="{ prop: 'id', order: 'descending' }"
-          @row-dblclick="seeAccountOperations"
-        >
+        <el-table :data="tableData" :default-sort="{ prop: 'id', order: 'descending' }">
           <el-table-column label="Пополнить счет" align="center">
             <template v-if="!!scope.row" slot-scope="scope">
               <el-button
@@ -26,10 +20,10 @@
                 :plain="true"
                 size="mini"
                 @click="handleAdd(scope.row.id)"
-                >Пополнить</el-button
-              >
+              >Пополнить</el-button>
             </template>
           </el-table-column>
+
           <el-table-column label="Списать со счета" align="center">
             <template v-if="!!scope.row" slot-scope="scope">
               <el-button
@@ -37,25 +31,30 @@
                 :plain="true"
                 size="mini"
                 @click="handleRemove(scope.row.id)"
-                >Удалить</el-button
-              >
+              >Потратить</el-button>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="id"
-            label="Номер счета"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            align="center"
-            prop="balance"
-            label="Баланс счета"
-          ></el-table-column>
+
+          <el-table-column prop="id" label="Номер счета" align="center"></el-table-column>
+          <el-table-column align="center" prop="balance" label="Баланс счета"></el-table-column>
           <el-table-column label="Операций по счету" align="center">
-            <template slot-scope="scope">{{
+            <template slot-scope="scope">
+              {{
               scope.row.actions.length ? scope.row.actions + "" : 0
-            }}</template>
+              }}
+            </template>
           </el-table-column>
+          <el-table-column label="История" align="center">
+            <template v-if="!!scope.row" slot-scope="scope">
+              <el-button
+                icon="el-icon-delete"
+                :plain="true"
+                size="mini"
+                @click="seeAccountOperations(scope.row.id)"
+              >История</el-button>
+            </template>
+          </el-table-column>
+
           <el-table-column label="Пополнить счет" align="center">
             <template v-if="!!scope.row" slot-scope="scope">
               <el-button
@@ -63,8 +62,7 @@
                 :plain="true"
                 size="mini"
                 @click="handleDelete(scope.row.id)"
-                >Удалить</el-button
-              >
+              >Удалить</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -82,8 +80,10 @@
             :total="pgnData.total"
           ></el-pagination>
         </div>
+        <AccountHistory v-if="currentSelectedId" :id="currentSelectedId" />
       </el-main>
     </el-container>
+
     <UserInfoModal />
     <AccountOperationModal />
   </el-container>
@@ -92,10 +92,13 @@
 <script>
 import UserInfoModal from "./modals/UserInfoModal.vue";
 import AccountOperationModal from "./modals/AccountOperationModal.vue";
+import AccountHistory from "./AccountHistory.vue";
+
 export default {
   name: "Dashboard",
   data() {
     return {
+      currentSelectedId: null,
       pgnData: {
         currentPage: 1,
         pageSizes: [10, 15, 20, 25],
@@ -109,6 +112,7 @@ export default {
   components: {
     UserInfoModal,
     AccountOperationModal,
+    AccountHistory,
   },
   computed: {
     token() {
@@ -131,14 +135,14 @@ export default {
   watch: {
     tableData: {
       deep: true,
-      handler: function(newVal) {
+      handler: function (newVal) {
         this.pgnData.curPageCount = newVal.length;
         this.pgnData.total = this.accounts.length;
       },
     },
   },
   methods: {
-    handleDelete: function(accId) {
+    handleDelete: function (accId) {
       this.$store.dispatch("confirmModal", {
         visible: true,
         id: accId,
@@ -149,8 +153,8 @@ export default {
         },
       });
     },
-    seeAccountOperations(row) {
-      console.log(row);
+    seeAccountOperations(id) {
+      this.currentSelectedId = id;
     },
     handleRemove(accId) {
       this.$store.dispatch("operationModal", {
@@ -179,8 +183,9 @@ export default {
       this.$store.dispatch("createAccount");
     },
   },
-  created: async function() {
+  created: async function () {
     this.$store.dispatch("getClientAccounts");
+    this.$store.dispatch("getClientOperations");
   },
 };
 </script>
