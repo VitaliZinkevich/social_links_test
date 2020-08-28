@@ -14,6 +14,9 @@ const store = new Vuex.Store({
         visible: false,
         message: "",
       },
+      confirmModal: {
+        visible: false,
+      },
       accountOperationModal: {
         visible: false,
         type: 0,
@@ -21,6 +24,9 @@ const store = new Vuex.Store({
     },
   },
   actions: {
+    deleteAccaunt(context, id) {
+      console.log("deleteAccaunt", context, id);
+    },
     handleAddAmount() {
       console.log("handleAddAmount");
     },
@@ -136,6 +142,9 @@ const store = new Vuex.Store({
     operationModal(context, options) {
       context.commit("OPEN_OPERATION_DIALOG", options);
     },
+    confirmModal(context, options) {
+      context.commit("OPEN_CONFIRM_DIALOG", options);
+    },
   },
   mutations: {
     SET_ACCOUNTS(state, payload) {
@@ -146,6 +155,9 @@ const store = new Vuex.Store({
     },
     OPEN_OPERATION_DIALOG(state, options) {
       state.modals.accountOperationModal = options;
+    },
+    OPEN_CONFIRM_DIALOG(state, options) {
+      state.modals.confirmModal = options;
     },
   },
   getters: {
@@ -160,6 +172,9 @@ const store = new Vuex.Store({
     },
     accountOperationModal(state) {
       return state.modals.accountOperationModal;
+    },
+    confirmModal(state) {
+      return state.modals.confirmModal;
     },
   },
 });

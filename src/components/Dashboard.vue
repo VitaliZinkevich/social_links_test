@@ -24,7 +24,6 @@
               <el-button
                 icon="el-icon-circle-plus"
                 :plain="true"
-                type="info"
                 size="mini"
                 @click="handleAdd(scope.row.id)"
                 >Пополнить</el-button
@@ -36,10 +35,9 @@
               <el-button
                 icon="el-icon-remove"
                 :plain="true"
-                type="info"
                 size="mini"
                 @click="handleRemove(scope.row.id)"
-                >Потратить</el-button
+                >Удалить</el-button
               >
             </template>
           </el-table-column>
@@ -65,7 +63,8 @@
                 :plain="true"
                 size="mini"
                 @click="handleDelete(scope.row.id)"
-              ></el-button>
+                >Удалить</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -139,8 +138,16 @@ export default {
     },
   },
   methods: {
-    handleDelete(accId) {
-      console.log(accId);
+    handleDelete: function(accId) {
+      this.$store.dispatch("confirmModal", {
+        visible: true,
+        id: accId,
+        cd: (state) => {
+          if (state) {
+            this.$store.dispatch("deleteAccaunt", accId);
+          }
+        },
+      });
     },
     seeAccountOperations(row) {
       console.log(row);
