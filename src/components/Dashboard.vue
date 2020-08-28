@@ -15,7 +15,7 @@
 
       <el-main>
         <el-table
-          :data="accounts"
+          :data="tableData"
           :default-sort="{ prop: 'id', order: 'descending' }"
         >
           <el-table-column prop="id" label="Номер счета"></el-table-column>
@@ -33,8 +33,14 @@
           <el-pagination
             v-show="accounts.length > 10"
             small
-            layout="prev, pager, next"
-            :total="accounts.length"
+            layout="sizes, jumper, prev, pager, next"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pgnData.currentPage"
+            :page-sizes="pgnData.pageSizes"
+            :page-size="pgnData.pageSize"
+            :page-count="pgnData.pageCount"
+            :total="pgnData.total"
           ></el-pagination>
         </div>
       </el-main>
@@ -49,7 +55,16 @@ import UserInfoModal from "./modals/UserInfoModal.vue";
 export default {
   name: "Dashboard",
   data() {
-    return {};
+    return {
+      pgnData: {
+        currentPage: 1,
+        pageSizes: [10, 15, 20, 25],
+        pageSize: 10,
+        total: 0,
+        pageCount: 0,
+        curPageCount: 0,
+      },
+    };
   },
   components: {
     UserInfoModal,
@@ -61,8 +76,36 @@ export default {
     accounts() {
       return this.$store.getters.accounts;
     },
+    tableData() {
+      let tabData = this.accounts;
+      let data = [];
+      if (tabData) {
+        let start = (this.pgnData.currentPage - 1) * this.pgnData.pageSize;
+        let end = start + this.pgnData.pageSize;
+        data = tabData.slice(start, end);
+      }
+      return data;
+    },
+  },
+  watch: {
+    tableData: {
+      deep: true,
+      handler: function(newVal) {
+        this.pgnData.curPageCount = newVal.length;
+        this.pgnData.total = this.accounts.length;
+      },
+    },
   },
   methods: {
+    resetPagination() {
+      this.pgnData.currentPage = 1;
+    },
+    handleSizeChange(val) {
+      this.pgnData.pageSize = val;
+    },
+    handleCurrentChange(val) {
+      this.pgnData.currentPage = val;
+    },
     createAccount() {
       this.$store.dispatch("createAccount");
     },
