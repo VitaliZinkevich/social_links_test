@@ -180,21 +180,7 @@ export default {
     },
   },
   created: async function() {
-    try {
-      let res = await this.$store.dispatch("getClientAccounts");
-      if (res) {
-        console.log(res);
-      }
-    } catch (e) {
-      console.log(e);
-      let what = await this.$store.dispatch("errorModal", {
-        visible: true,
-        message: "Не удалось обновить список. Попробуйте позже.",
-      });
-      if (what) {
-        this.$store.dispatch("getClientAccounts");
-      }
-    }
+    this.$store.dispatch("getClientAccounts");
   },
 };
 </script>

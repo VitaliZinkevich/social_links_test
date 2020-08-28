@@ -49,6 +49,18 @@ const store = new Vuex.Store({
       }
     },
     getClientAccounts(context) {
+      // try {
+      //   let res = await
+      //   if (res) {
+      //     console.log(res);
+      //   }
+      // } catch (e) {
+      //   console.log(e);
+      //   this.$store.dispatch("errorModal", {
+      //     visible: true,
+      //     message: "Не удалось обновить список. Попробуйте позже.",
+      //   });
+      // }
       context.dispatch("startLoading");
       return new Promise((resolve /*reject*/) => {
         return setTimeout(() => {
