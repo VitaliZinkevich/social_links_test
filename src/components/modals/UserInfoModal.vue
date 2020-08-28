@@ -1,5 +1,7 @@
 <template>
   <el-dialog
+    :close-on-click-modal="false"
+    :close-on-press-escape="true"
     :visible="optionsError.visible"
     width="50%"
     :before-close="handleClose"
@@ -14,7 +16,7 @@
       >
       </el-alert>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleClose()">Ok</el-button>
+        <el-button @click="handleClose()">OK</el-button>
       </span>
     </template>
   </el-dialog>
@@ -24,9 +26,7 @@
 export default {
   name: "UserInfoModal",
   data() {
-    return {
-      dialogVisible: false,
-    };
+    return {};
   },
   computed: {
     optionsError() {

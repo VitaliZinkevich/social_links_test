@@ -17,16 +17,56 @@
         <el-table
           :data="tableData"
           :default-sort="{ prop: 'id', order: 'descending' }"
+          @row-dblclick="seeAccountOperations"
         >
-          <el-table-column prop="id" label="Номер счета"></el-table-column>
+          <el-table-column label="Пополнить счет" align="center">
+            <template v-if="!!scope.row" slot-scope="scope">
+              <el-button
+                icon="el-icon-circle-plus"
+                :plain="true"
+                type="info"
+                size="mini"
+                @click="handleAdd(scope.row.id)"
+                >Пополнить</el-button
+              >
+            </template>
+          </el-table-column>
+          <el-table-column label="Списать со счета" align="center">
+            <template v-if="!!scope.row" slot-scope="scope">
+              <el-button
+                icon="el-icon-remove"
+                :plain="true"
+                type="info"
+                size="mini"
+                @click="handleRemove(scope.row.id)"
+                >Потратить</el-button
+              >
+            </template>
+          </el-table-column>
           <el-table-column
+            prop="id"
+            label="Номер счета"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            align="center"
             prop="balance"
             label="Баланс счета"
           ></el-table-column>
-          <el-table-column label="Операций по счету">
+          <el-table-column label="Операций по счету" align="center">
             <template slot-scope="scope">{{
               scope.row.actions.length ? scope.row.actions + "" : 0
             }}</template>
+          </el-table-column>
+          <el-table-column label="Пополнить счет" align="center">
+            <template v-if="!!scope.row" slot-scope="scope">
+              <el-button
+                icon="el-icon-delete"
+                :plain="true"
+                size="mini"
+                @click="handleDelete(scope.row.id)"
+              ></el-button>
+            </template>
           </el-table-column>
         </el-table>
         <div class="pagintor-container">
@@ -46,12 +86,13 @@
       </el-main>
     </el-container>
     <UserInfoModal />
+    <AccountOperationModal />
   </el-container>
 </template>
 
 <script>
 import UserInfoModal from "./modals/UserInfoModal.vue";
-
+import AccountOperationModal from "./modals/AccountOperationModal.vue";
 export default {
   name: "Dashboard",
   data() {
@@ -68,6 +109,7 @@ export default {
   },
   components: {
     UserInfoModal,
+    AccountOperationModal,
   },
   computed: {
     token() {
@@ -97,6 +139,26 @@ export default {
     },
   },
   methods: {
+    handleDelete(accId) {
+      console.log(accId);
+    },
+    seeAccountOperations(row) {
+      console.log(row);
+    },
+    handleRemove(accId) {
+      this.$store.dispatch("operationModal", {
+        visible: true,
+        type: 2,
+        id: accId,
+      });
+    },
+    handleAdd(accId) {
+      this.$store.dispatch("operationModal", {
+        visible: true,
+        type: 1,
+        id: accId,
+      });
+    },
     resetPagination() {
       this.pgnData.currentPage = 1;
     },

@@ -14,9 +14,20 @@ const store = new Vuex.Store({
         visible: false,
         message: "",
       },
+      accountOperationModal: {
+        visible: false,
+        type: 0,
+      },
     },
   },
   actions: {
+    handleAddAmount() {
+      console.log("handleAddAmount");
+    },
+    handleRemoveAmount() {
+      console.log("handleRemoveAmount");
+    },
+
     async createAccount(context) {
       try {
         await axios.post(
@@ -122,6 +133,9 @@ const store = new Vuex.Store({
     errorModal(context, options) {
       context.commit("OPEN_ERROR_DIALOG", options);
     },
+    operationModal(context, options) {
+      context.commit("OPEN_OPERATION_DIALOG", options);
+    },
   },
   mutations: {
     SET_ACCOUNTS(state, payload) {
@@ -129,6 +143,9 @@ const store = new Vuex.Store({
     },
     OPEN_ERROR_DIALOG(state, options) {
       state.modals.errorModal = options;
+    },
+    OPEN_OPERATION_DIALOG(state, options) {
+      state.modals.accountOperationModal = options;
     },
   },
   getters: {
@@ -140,6 +157,9 @@ const store = new Vuex.Store({
     },
     errorModal(state) {
       return state.modals.errorModal;
+    },
+    accountOperationModal(state) {
+      return state.modals.accountOperationModal;
     },
   },
 });
